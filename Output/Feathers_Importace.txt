@@ -1,0 +1,22 @@
+Computing permutation feature importance for Random Forest (may be slow)...
+                            feature  importance
+0                       daily_steps    0.041096
+1               bmi_category_Normal    0.041096
+2                               age    0.036530
+3             blood_pressure_140/95    0.018265
+4                        heart_rate    0.018265
+5                      stress_level    0.013699
+6                bmi_category_Obese    0.013699
+7           physical_activity_level    0.013699
+8                 occupation_Doctor    0.009132
+9           bmi_category_Overweight    0.009132
+10                   sleep_duration    0.009132
+11                 quality_of_sleep    0.009132
+12            blood_pressure_125/80    0.009132
+13                      gender_Male    0.000000
+14            occupation_Accountant    0.000000
+15              occupation_Engineer    0.000000
+16                    gender_Female    0.000000
+17           occupation_Salesperson    0.000000
+18  occupation_Sales Representative    0.000000
+19                 occupation_Nurse    0.000000

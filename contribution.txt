@@ -1,0 +1,41 @@
+Contributions
+===============
+
+Krishna Suryawanshi(S20230010126):
+Implemented the K-Nearest Neighbors (KNN) algorithm as a baseline classifier for sleep
+disorder detection, contributing to the comparative analysis of multiple machine learning
+methods. His analysis emphasized KNN's performance metrics, revealing its limitations in
+accuracy while showcasing its efficiency in training speed.
+
+Tejas Kiran Pagare(S20230010172):
+Implemented the Random Forest algorithm from scratch for sleep disorder detection,
+contributing to a comparative analysis of multiple machine learning methods. His work
+highlighted Random Forest’s strong predictive accuracy and robustness compared to
+baseline models, while also emphasizing its ability to handle feature variability and
+prevent overfitting effectively. Performance evaluation was conducted using key metrics
+such as accuracy, precision, recall, F1-score, and confusion matrix analysis to validate
+the model’s effectiveness.
+
+Vasudev Dilware(S20230010253):
+Implemented Logistic Regression from scratch for sleep disorder detection. The work
+provided a reliable, highly-interpretable linear baseline for comparative analysis against
+other machine learning models. Performance was validated using key metrics, including
+accuracy, F1-score, and confusion matrix analysis.
+
+Vedant Kasar(S20230010118):
+Implemented a Linear SVM from scratch using Stochastic Gradient Descent (SGD) with
+hinge loss and One-vs-Rest classification. Contributed to the comparative visualization
+framework that displays accuracy, F1-scores, training times, and confusion matrices across
+models. Additionally helped build a unified ML pipeline for preprocessing, training, and
+report generation enabling complete comparison of KNN, Decision Tree, Random Forest, and
+SVM models.
+
+Yashwardhan Singh Chouhan(S20230010268):
+Implemented the Decision Tree algorithm as a baseline classifier for sleep disorder
+detection, contributing to the comparative analysis of multiple machine learning methods.
+His analysis emphasized the Decision Tree’s performance metrics, highlighting its
+interpretability and feature importance analysis while identifying potential risks of
+overfitting in complex datasets.
+
+-------
+

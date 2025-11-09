@@ -6,6 +6,7 @@ This repository trains and compares four classifiers implemented **from scratch*
 - Decision Tree
 - Random Forest (ensemble of Decision Trees)
 - Linear SVM (one-vs-rest, primal hinge loss with SGD)
+- Logistic Regression 
 
 The pipeline:
 - Normalizes column names to `snake_case`
@@ -24,6 +25,7 @@ The pipeline:
 - `models/decision_tree.py` — Decision tree implementation
 - `models/random_forest.py` — Random forest + permutation importance
 - `models/svm.py` — linear SVM (from-scratch) OvR
+- `models/logistic_regression.py` - Logistic Regression(from scratch) 
 - `utils.py` — preprocessing, custom classification report, scaler
 - `run.py` — main script to train all models, plot, and save `outputs/` + `artifacts/`
 - `requirements.txt` — Python dependencies

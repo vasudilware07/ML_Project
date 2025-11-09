@@ -1,4 +1,4 @@
-# run.py
+# run.py  (updated with logistic regression)
 import os
 import time
 import pickle
@@ -13,7 +13,7 @@ from models.knn import KNN
 from models.decision_tree import DecisionTreeClassifierCustom
 from models.random_forest import RandomForestCustom, permutation_feature_importance
 from models.svm import train_ovr_svm, predict_ovr_svm
-from models.logistic import LogisticRegressionCustom
+from models.logistic_regression import LogisticOVR   # <-- new import
 
 sns.set(style="whitegrid")
 np.random.seed(42)
@@ -35,12 +35,6 @@ def stratified_train_test_split(X_df, y_arr, test_size=0.2, random_state=42):
         test_idx.extend(cls_idx[:n_test])
         train_idx.extend(cls_idx[n_test:])
     return X_df.iloc[train_idx], X_df.iloc[test_idx], y_arr[train_idx], y_arr[test_idx]
-
-def save_plot(fig, name):
-    path = os.path.join(OUTPUT_DIR, name)
-    fig.savefig(path, bbox_inches='tight')
-    plt.close(fig)
-    return path
 
 def run_all_models(csv_path):
     print("Loading & preprocessing...")
@@ -84,6 +78,17 @@ def run_all_models(csv_path):
     acc_rf = np.mean(y_test == y_pred_rf)
     report_rf, _, _, f1_rf, _ = classification_report_custom(y_test, y_pred_rf, class_names=[k for k,v in sorted(label_map.items(), key=lambda x:x[1])])
     results['RandomForest'] = {'acc':acc_rf, 'time': t1-t0, 'y_pred':y_pred_rf, 'report':report_rf, 'f1':f1_rf}
+
+    # Logistic Regression (OvR) - NEW
+    print("Training Logistic Regression (OvR) from-scratch...")
+    t0 = time.time()
+    logreg = LogisticOVR(lr=0.05, epochs=300, batch_size=64, C=0.5, verbose=False, random_state=42)
+    logreg.fit(X_train, y_train)
+    t1 = time.time()
+    y_pred_log = logreg.predict(X_test)
+    acc_log = np.mean(y_test == y_pred_log)
+    report_log, _, _, f1_log, _ = classification_report_custom(y_test, y_pred_log, class_names=[k for k,v in sorted(label_map.items(), key=lambda x:x[1])])
+    results['LogisticRegression'] = {'acc':acc_log, 'time': t1-t0, 'y_pred':y_pred_log, 'report':report_log, 'f1':f1_log}
 
     # Linear SVM (from-scratch OvR)
     print("Training Linear SVM (OvR) from-scratch...")
@@ -138,7 +143,7 @@ def run_all_models(csv_path):
     classes = [k for k,v in sorted(label_map.items(), key=lambda x:x[1])]
     f1_matrix = np.vstack([results[m]['f1'] for m in names])  # (n_models, n_classes)
     x = np.arange(len(classes))
-    width = 0.18
+    width = 0.16
     fig = plt.figure(figsize=(10,5))
     for i, row in enumerate(f1_matrix):
         plt.bar(x + i*width, row, width=width, label=names[i])
@@ -199,9 +204,7 @@ def run_all_models(csv_path):
         'rf_model': rf,
         'svm_models': svm_models,
         'svm_classes': svm_classes,
-        'knn_model': knn,
-        'decision_tree_model': dt,
-        'logistic_model': logreg,
+        'logreg': logreg,
         'feature_names': feature_names,
         'scaler': scaler,
         'label_map': label_map
@@ -230,7 +233,6 @@ def run_all_models(csv_path):
     report_path = os.path.join(OUTPUT_DIR, "report.html")
     with open(report_path, 'w', encoding='utf-8') as fh:
         fh.write(html)
-    # copy images into same directory (they are already saved there)
     print(f"Saved report to {report_path}")
     return results, artifacts
 

@@ -13,6 +13,7 @@ from models.knn import KNN
 from models.decision_tree import DecisionTreeClassifierCustom
 from models.random_forest import RandomForestCustom, permutation_feature_importance
 from models.svm import train_ovr_svm, predict_ovr_svm
+from models.logistic import LogisticRegressionCustom
 
 sns.set(style="whitegrid")
 np.random.seed(42)
@@ -94,6 +95,17 @@ def run_all_models(csv_path):
     report_svm, _, _, f1_svm, _ = classification_report_custom(y_test, y_pred_svm, class_names=[k for k,v in sorted(label_map.items(), key=lambda x:x[1])])
     results['LinearSVM_OvR'] = {'acc':acc_svm, 'time': t1-t0, 'y_pred':y_pred_svm, 'report':report_svm, 'f1':f1_svm}
 
+    # Logistic Regression (multiclass softmax) from-scratch
+    print("Training Logistic Regression (multiclass softmax, from-scratch)...")
+    t0 = time.time()
+    logreg = LogisticRegressionCustom(lr=0.02, reg_lambda=0.001, epochs=500, batch_size=64, decay=0.005, random_state=42)
+    logreg.fit(X_train, y_train)
+    t1 = time.time()
+    y_pred_log = logreg.predict(X_test)
+    acc_log = np.mean(y_test == y_pred_log)
+    report_log, _, _, f1_log, _ = classification_report_custom(y_test, y_pred_log, class_names=[k for k,v in sorted(label_map.items(), key=lambda x:x[1])])
+    results['LogisticRegression'] = {'acc':acc_log, 'time': t1-t0, 'y_pred':y_pred_log, 'report':report_log, 'f1':f1_log}
+
     # Summaries
     print("\nSUMMARY:")
     for name, info in results.items():
@@ -162,7 +174,7 @@ def run_all_models(csv_path):
     fi_path = os.path.join(OUTPUT_DIR, "rf_feature_importance.png")
     topk = min(25, len(fi_df))
     fig = plt.figure(figsize=(8,6))
-    import seaborn as sns
+    # seaborn is already imported as `sns` at module level; avoid re-importing locally to prevent scoping issues
     sns.barplot(x='importance', y='feature', data=fi_df.head(topk))
     plt.title("Permutation Feature Importance (Random Forest)")
     fig.savefig(fi_path, bbox_inches='tight'); plt.close(fig)
@@ -173,6 +185,9 @@ def run_all_models(csv_path):
         'rf_model': rf,
         'svm_models': svm_models,
         'svm_classes': svm_classes,
+        'knn_model': knn,
+        'decision_tree_model': dt,
+        'logistic_model': logreg,
         'feature_names': feature_names,
         'scaler': scaler,
         'label_map': label_map
